@@ -1,140 +1,149 @@
-# AI Chatbot with RAG, Tools, and Chat History
+# 🤖 AI Chatbot with RAG, Tools & Streaming UI
 
-A Streamlit-based AI chatbot built with LangGraph, LangChain, FAISS, and Groq.  
-It supports:
-- direct LLM responses
-- PDF-based RAG for document Q&A
-- stock price lookup
-- calculator tool
-- DuckDuckGo web search
-- threaded chat history with persistent checkpointing
+An AI-powered chatbot built using LangGraph and LangChain that supports real-time conversations, PDF-based retrieval (RAG), and tool integration (calculator, stock data, and web search). It features a Streamlit interface with streaming responses and persistent chat history.
 
-## Features
+---
 
-- **PDF RAG**: Upload a PDF and ask questions about its content.
-- **Tool calling**: The assistant can use:
-  - `rag_tool` for document retrieval
-  - `calculator` for arithmetic
-  - `get_stock_price` for live stock data
-  - `DuckDuckGoSearchRun` for search
-- **Conversation memory**: Chat history is stored using LangGraph checkpointing with SQLite.
-- **Multi-chat support**: Start a new chat and revisit previous conversations.
-- **Streamlit UI**: Simple sidebar for uploads and chat switching.
+## 🚀 Features
 
-## Project Files
+* 💬 LLM-powered chatbot (Groq + Llama 3)
+* 📄 RAG over PDFs (FAISS + embeddings)
+* 🛠️ Tool integration:
 
-This project is centered around two Python files:
+  * Calculator
+  * Stock price API
+  * Web search (DuckDuckGo)
+* ⚡ Real-time streaming responses
+* 🧠 Multi-session chat with memory (thread-based)
+* 🎯 Clean and interactive Streamlit UI
 
-- `chatbot_rag_backend.py` — LangGraph workflow, tools, PDF ingestion, retriever storage, and checkpoint setup. fileciteturn0file0
-- `chatbot_rag_frontend.py` — Streamlit UI, chat input/output, PDF upload, conversation switching, and session state handling. fileciteturn0file1
+---
 
-## Suggested Folder Structure
+## 🏗️ Tech Stack
 
-```text
-chatbot-rag-project/
-├── chatbot_rag_backend.py
-├── chatbot_rag_frontend.py
-├── requirements.txt
-├── README.md
-├── .env
-├── ai_chatbot.db
-├── .gitignore
-└── assets/
+* **LLM & Agents**: LangChain, LangGraph
+* **Model Provider**: Groq (Llama 3)
+* **Vector Store**: FAISS
+* **Embeddings**: Ollama
+* **Frontend**: Streamlit
+* **Backend**: Python
+* **Database**: SQLite (for chat memory)
+
+---
+
+## 📂 Project Structure
+
 ```
-
-A cleaner long-term structure could be:
-
-```text
-chatbot-rag-project/
-├── app/
-│   ├── backend.py
-│   └── frontend.py
-├── data/
-│   └── uploads/
-├── assets/
-├── .env
+AI_CHATBOT/
+├── chatbot_backend.py
+├── chatbot_frontend.py
 ├── requirements.txt
 ├── README.md
 ├── .gitignore
-└── ai_chatbot.db
+└── .env
 ```
 
-## Setup
+---
 
-### 1) Create a virtual environment
+## ⚙️ Setup Instructions
 
-```bash
-python -m venv venv
+### 1️⃣ Clone the repository
+
+```
+git clone https://github.com/<your-username>/ai-chatbot-rag.git
+cd ai-chatbot-rag
 ```
 
-Activate it:
+---
 
-```bash
-# macOS / Linux
-source venv/bin/activate
+### 2️⃣ Create environment (recommended)
 
-# Windows
-venv\Scripts\activate
+Using conda:
+
+```
+conda create -n chatbot python=3.10 -y
+conda activate chatbot
 ```
 
-### 2) Install dependencies
+---
 
-```bash
+### 3️⃣ Install dependencies
+
+```
 pip install -r requirements.txt
 ```
 
-### 3) Add environment variables
+---
 
-Create a `.env` file in the project root:
+### 4️⃣ Add environment variables
 
-```env
-GROQ_API_KEY=your_groq_api_key
+Create a `.env` file:
+
 ```
-
-Your current backend also calls Alpha Vantage directly for stock prices. The API key is hardcoded in the script right now, so it is better to move it to an environment variable before pushing to GitHub.
-
-Recommended:
-
-```env
+GROQ_API_KEY=your_groq_api_key
 ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key
 ```
 
-## Run the app
+---
 
-If your frontend file is named `chatbot_rag_frontend.py`:
+### 5️⃣ Run the app
 
-```bash
-streamlit run chatbot_rag_frontend.py
+```
+streamlit run chatbot_frontend.py
 ```
 
-## How it works
+---
 
-1. The frontend creates a chat thread and keeps UI state in Streamlit.
-2. When you upload a PDF, the backend:
-   - loads the PDF with `PyPDFLoader`
-   - splits it into chunks
-   - creates a FAISS vector store
-   - stores the retriever per thread
-3. The LangGraph agent uses tools when needed.
-4. Responses and tool calls are checkpointed in SQLite, so conversations can be revisited later.
+## 🧠 How It Works
 
-## Notes
+1. User inputs a query via Streamlit UI
+2. LangGraph agent decides:
 
-- Make sure Ollama is running locally if you are using `OllamaEmbeddings(model="nomic-embed-text")`.
-- Make sure the required model is available in your local Ollama setup.
-- The current code uses a local SQLite database named `ai_chatbot.db`.
+   * Direct LLM response OR
+   * Tool usage OR
+   * RAG retrieval from uploaded PDF
+3. If PDF is uploaded:
 
-## Recommended Improvements Before Publishing
+   * Text is chunked and stored in FAISS
+   * Relevant chunks are retrieved for answers
+4. Responses are streamed live to the UI
+5. Chat history is maintained using thread-based memory
 
-- Move API keys out of source code and into `.env`
-- Add `.gitignore` to exclude:
-  - `.env`
-  - `ai_chatbot.db`
-  - `__pycache__/`
-  - `.streamlit/`
-  - `.venv/` or `venv/`
-- Split backend and frontend into an `app/` folder if you want a more professional repo structure
+---
 
-## License
+## 📸 Demo (Optional)
 
-Add a license before sharing publicly on GitHub.
+*Add screenshots here to make your project stand out*
+
+---
+
+## 💡 Future Improvements
+
+* 🔐 Authentication & user accounts
+* ☁️ Deployment (AWS / Render / GCP)
+* 📊 Observability with LangSmith
+* 🧾 Support for multiple file formats
+* ⚡ Faster retrieval with hybrid search
+
+---
+
+## 🏆 Resume Highlight
+
+> Developed an AI chatbot with RAG-based document retrieval and tool integration using LangGraph and LangChain, supporting real-time streaming responses and multi-session chat.
+
+---
+
+## 📜 License
+
+This project is open-source and available under the MIT License.
+
+---
+
+## 🙌 Acknowledgements
+
+* LangChain & LangGraph
+* Groq API
+* Streamlit
+* FAISS
+
+---
