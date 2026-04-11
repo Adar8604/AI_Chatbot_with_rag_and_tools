@@ -7,7 +7,7 @@ langgraph==0.1.19
 langchain-text-splitters==0.2.2
 
 # Vector DB
-faiss-cpu==1.8.0
+faiss-cpu
 
 # UI
 streamlit==1.36.0
