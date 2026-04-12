@@ -1,22 +1,41 @@
-# Core LangChain ecosystem (stable compatible versions)
-langchain==0.2.14
-langchain-core==0.2.32
-langchain-community==0.2.12
-langchain-groq==0.1.9
-langgraph==0.1.19
-langchain-text-splitters==0.2.2
+# --- Core LangChain ecosystem ---
+langchain==1.2.15
+langchain-core==1.2.26
+langchain-community==0.4.1
+langchain-text-splitters==1.1.1
 
-# Vector DB
-faiss-cpu
+# --- LangGraph ---
+langgraph==1.1.6
+langgraph-checkpoint==4.0.1
+langgraph-checkpoint-sqlite==3.0.3
 
-# UI
-streamlit==1.36.0
+# --- LLM integrations ---
+langchain-groq==1.1.2
+langchain-openai==1.1.12
+langchain-google-genai==4.2.1
+langchain-huggingface==1.2.1
 
-# Utilities
-python-dotenv==1.0.1
-requests==2.32.3
-duckduckgo-search==5.3.1
+# --- Vector DB ---
+faiss-cpu==1.13.2
+chromadb==1.5.5
 
-# Optional but recommended
-tqdm==4.66.4
+# --- ML / Embeddings ---
+sentence-transformers==5.3.0
+transformers==5.4.0
+torch==2.11.0
 numpy==1.26.4
+
+# --- UI ---
+streamlit==1.55.0
+
+# --- Utilities ---
+python-dotenv==1.2.2
+requests==2.32.5
+tqdm==4.67.3
+
+# ✅ IMPORTANT CHANGE (fix for your error)
+ddgs==9.13.0
+
+# --- Core dependencies ---
+pydantic==2.12.5
+sqlalchemy==2.0.48
