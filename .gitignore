@@ -14,3 +14,7 @@ ai_chatbot.db
 
 # OS files
 .DS_Store
+
+*.pyc
+node_modules/
+dist/

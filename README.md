@@ -1,6 +1,8 @@
 # 🤖 AI Chatbot with RAG, Tools & Streaming UI
 
-An AI-powered chatbot built using LangGraph and LangChain that supports real-time conversations, PDF-based retrieval (RAG), and tool integration (calculator, stock data, and web search). It features a Streamlit interface with streaming responses and persistent chat history.
+An AI-powered chatbot built using **LangGraph + LangChain** that supports real-time conversations, PDF-based retrieval (RAG), and tool integration (calculator, stock data, and web search).
+
+It features a modular backend, streaming UI with Streamlit, and persistent multi-session chat memory.
 
 ---
 
@@ -14,8 +16,9 @@ An AI-powered chatbot built using LangGraph and LangChain that supports real-tim
   * Stock price API
   * Web search (DuckDuckGo)
 * ⚡ Real-time streaming responses
-* 🧠 Multi-session chat with memory (thread-based)
-* 🎯 Clean and interactive Streamlit UI
+* 🧠 Multi-session chat with persistent memory (thread-based)
+* 📂 Modular backend architecture (clean separation of concerns)
+* 🎯 Interactive Streamlit UI
 
 ---
 
@@ -26,8 +29,8 @@ An AI-powered chatbot built using LangGraph and LangChain that supports real-tim
 * **Vector Store**: FAISS
 * **Embeddings**: Ollama
 * **Frontend**: Streamlit
-* **Backend**: Python
-* **Database**: SQLite (for chat memory)
+* **Backend**: Python (modular architecture)
+* **Database**: SQLite (chat memory)
 
 ---
 
@@ -35,12 +38,29 @@ An AI-powered chatbot built using LangGraph and LangChain that supports real-tim
 
 ```
 AI_CHATBOT/
-├── chatbot_backend.py
-├── chatbot_frontend.py
+├── backend/
+│   ├── __init__.py
+│   └── app/
+│       ├── __init__.py
+│       ├── config.py        # Environment & settings
+│       ├── core.py          # LLM + embeddings setup
+│       ├── tools.py         # All tools (calculator, stock, search, RAG)
+│       ├── rag_store.py     # PDF ingestion + retriever storage
+│       ├── graph.py         # LangGraph workflow (state + nodes)
+│       └── service.py       # Interface layer for frontend
+│
+├── frontend/
+│   ├── app.py               # Main Streamlit app
+│   ├── sidebar.py          # Sidebar UI (threads + uploads)
+│   └── chat_area.py        # Chat rendering + streaming
+│
+├── data/
+│   └── chatbot.db          # SQLite database
+│
+├── .env
 ├── requirements.txt
 ├── README.md
-├── .gitignore
-└── .env
+└── .gitignore
 ```
 
 ---
@@ -49,7 +69,7 @@ AI_CHATBOT/
 
 ### 1️⃣ Clone the repository
 
-```
+```bash
 git clone https://github.com/<your-username>/ai-chatbot-rag.git
 cd ai-chatbot-rag
 ```
@@ -60,16 +80,24 @@ cd ai-chatbot-rag
 
 Using conda:
 
-```
+```bash
 conda create -n chatbot python=3.10 -y
 conda activate chatbot
+```
+
+Or using venv:
+
+```bash
+python -m venv venv
+source venv/bin/activate   # Mac/Linux
+venv\Scripts\activate      # Windows
 ```
 
 ---
 
 ### 3️⃣ Install dependencies
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
@@ -79,41 +107,62 @@ pip install -r requirements.txt
 
 Create a `.env` file:
 
-```
+```env
 GROQ_API_KEY=your_groq_api_key
 ALPHA_VANTAGE_API_KEY=your_alpha_vantage_key
 ```
 
 ---
 
-### 5️⃣ Run the app
+### 5️⃣ Run the app (IMPORTANT: from project root)
 
-```
-streamlit run chatbot_frontend.py
+```bash
+streamlit run frontend/app.py
 ```
 
 ---
 
 ## 🧠 How It Works
 
-1. User inputs a query via Streamlit UI
+1. User enters a query via Streamlit UI
+
 2. LangGraph agent decides:
 
-   * Direct LLM response OR
-   * Tool usage OR
-   * RAG retrieval from uploaded PDF
-3. If PDF is uploaded:
+   * Direct LLM response
+   * Tool usage
+   * RAG retrieval (if PDF is uploaded)
 
-   * Text is chunked and stored in FAISS
-   * Relevant chunks are retrieved for answers
-4. Responses are streamed live to the UI
-5. Chat history is maintained using thread-based memory
+3. For PDF queries:
+
+   * Document is chunked
+   * Stored in FAISS
+   * Relevant chunks retrieved
+
+4. Tool execution (if required):
+
+   * Calculator
+   * Stock API
+   * Web search
+
+5. Final response is generated and streamed in real-time
+
+6. Chat history is stored using thread-based memory (SQLite)
 
 ---
 
-## 📸 Demo (Optional)
+## ⚡ Performance Optimizations
 
-*Add screenshots here to make your project stand out*
+* Reduced chunk size for faster retrieval
+* Limited top-k retrieval
+* Controlled LLM token output
+* Streaming responses for better UX
+* Modular architecture for scalability
+
+---
+
+## 📸 Demo
+
+*Add screenshots or GIFs here to showcase UI and features*
 
 ---
 
@@ -121,15 +170,10 @@ streamlit run chatbot_frontend.py
 
 * 🔐 Authentication & user accounts
 * ☁️ Deployment (AWS / Render / GCP)
-* 📊 Observability with LangSmith
-* 🧾 Support for multiple file formats
-* ⚡ Faster retrieval with hybrid search
-
----
-
-## 🏆 Resume Highlight
-
-> Developed an AI chatbot with RAG-based document retrieval and tool integration using LangGraph and LangChain, supporting real-time streaming responses and multi-session chat.
+* 📊 Observability (LangSmith)
+* 🧾 Multi-format document support (PDF, DOCX, TXT)
+* ⚡ Hybrid search (BM25 + vector search)
+* 🧠 Memory optimization & caching
 
 ---
 
@@ -145,5 +189,4 @@ This project is open-source and available under the MIT License.
 * Groq API
 * Streamlit
 * FAISS
-
----
+* Ollama
